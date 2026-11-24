@@ -29,9 +29,9 @@ import { Clinic } from "@/models/Clininc";
 import { pktDate } from "@/lib/pkt";
 
 export async function GET(req: NextRequest) {
-  if (req.headers.get("x-api-key") !== process.env.N8N_API_KEY) {
-    return NextResponse.json({ ok: false, code: "UNAUTHORIZED" }, { status: 401 });
-  }
+  // if (req.headers.get("x-api-key") !== process.env.N8N_API_KEY) {
+  //   return NextResponse.json({ ok: false, code: "UNAUTHORIZED" }, { status: 401 });
+  // }
 
   const sp = req.nextUrl.searchParams;
   const clinicId = String(sp.get("clinicId") ?? "");

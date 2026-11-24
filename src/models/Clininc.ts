@@ -8,7 +8,9 @@ const ClinicSchema = new Schema({
   maxTokens: { type: Number, default: 40 },          // per shift per day
   cutoffHour: { type: Number, default: 21 },         // WhatsApp same-day booking closes at 9 PM PKT
   avgConsultMin: { type: Number, default: 6 },
+  additionalInfo: String,                                 // shown on the WhatsApp booking page
 });
 
 export const Clinic =
-  mongoose.models.Clinic || mongoose.model("Clinic", ClinicSchema);
+  mongoose.models.Clinic ||
+   mongoose.model("Clinic", ClinicSchema);
