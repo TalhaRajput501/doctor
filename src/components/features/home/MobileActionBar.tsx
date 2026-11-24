@@ -1,5 +1,6 @@
-import { MessageCircle, Phone } from "lucide-react";
+import {   Phone } from "lucide-react";
 import { doctorContent, waLink } from "@/lib/content";
+import Whatsapp from "@/components/ui/Whatsapp";
 
 export function MobileActionBar() {
   const whatsappMessage = "Assalam o Alaikum, I would like to ask about an appointment.";
@@ -19,7 +20,7 @@ export function MobileActionBar() {
         rel="noopener noreferrer"
         className="inline-flex min-h-14 items-center justify-center gap-2 bg-whatsapp text-base font-semibold text-whatsapp-foreground"
       >
-        <MessageCircle className="size-5" aria-hidden="true" />
+        <Whatsapp />
         WhatsApp
       </a>
     </div>

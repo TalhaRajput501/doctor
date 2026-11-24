@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, MessageCircle, Phone } from "lucide-react";
+import { Menu, Phone } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { doctorContent, waLink } from "@/lib/content";
 import { Container } from "@/components/shared/Container";
@@ -58,15 +58,14 @@ export function Header({ className }: HeaderProps) {
               render={<a href={waLink(whatsappMessage)} target="_blank" rel="noopener noreferrer" />}
               aria-label="Book on WhatsApp"
             >
-              <MessageCircle className="size-5" aria-hidden="true" />
+              <Whatsapp />
             </Button>
 
             <Button
               className="hidden bg-whatsapp text-whatsapp-foreground hover:bg-whatsapp/90 md:inline-flex"
               render={<a href={waLink(whatsappMessage)} target="_blank" rel="noopener noreferrer" />}
             > 
-              {/* <MessageCircle className="size-4" aria-hidden="true" /> */}
-              <Whatsapp />
+               <Whatsapp />
               Book on WhatsApp
             </Button>
 
@@ -87,8 +86,9 @@ export function Header({ className }: HeaderProps) {
                 </nav>
                 <div className="mt-auto grid gap-3 p-5">
                   <a href={waLink(whatsappMessage)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-[var(--radius-xl)] bg-whatsapp px-5 text-base font-semibold text-whatsapp-foreground">
-                    <MessageCircle className="size-5" aria-hidden="true" />
-                    Book on WhatsApp
+                    <Whatsapp />
+
+                     Book on WhatsApp
                   </a>
                   <a href={`tel:${doctorContent.phoneHref}`} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-[var(--radius-xl)] border border-border bg-background px-5 text-base font-semibold text-foreground">
                     <Phone className="size-5" aria-hidden="true" />

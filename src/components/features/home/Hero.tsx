@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { CalendarDays, MapPin, MessageCircle, Phone } from "lucide-react";
+import { CalendarDays, MapPin,  Phone } from "lucide-react";
 import { doctorContent, waLink } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { Section } from "@/components/shared/Section";
@@ -51,8 +51,7 @@ export function Hero({ className }: HeroProps) {
               rel="noopener noreferrer"
               className="inline-flex min-h-11 items-center justify-center gap-2 rounded-[var(--radius-xl)] bg-whatsapp px-6 text-base font-semibold text-whatsapp-foreground transition-colors hover:bg-whatsapp/90 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring"
             >
-              {/* <MessageCircle className="size-5" aria-hidden="true" /> */}
-              <Whatsapp />
+               <Whatsapp />
               Book on WhatsApp
             </a>
             <a

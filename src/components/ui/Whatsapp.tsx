@@ -9,7 +9,7 @@ export default function Whatsapp() {
       width="24"
       height="24"
       viewBox="24 24 240 240"
-      className="w-6 h-6 shrink-0"
+      className="w-5 h-5 shrink-0"
     >
       <g transform="matrix(12 0 0 12 0 0)">
         <path

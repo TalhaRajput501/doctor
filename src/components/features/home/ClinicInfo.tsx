@@ -1,7 +1,8 @@
-import { Clock3, MapPin, Navigation, Phone, MessageCircle } from "lucide-react";
+import { Clock3, MapPin, Navigation, Phone } from "lucide-react";
 import { doctorContent, waLink } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { Section } from "@/components/shared/Section";
+import Whatsapp from "@/components/ui/Whatsapp";
 
 interface ClinicInfoProps {
   className?: string;
@@ -65,7 +66,7 @@ export function ClinicInfo({ className }: ClinicInfoProps) {
               <Phone className="size-5" aria-hidden="true" /> Call
             </a>
             <a href={waLink(whatsappMessage)} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-[var(--radius-xl)] bg-whatsapp px-4 text-base font-semibold text-whatsapp-foreground transition-colors hover:bg-whatsapp/90 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring">
-              <MessageCircle className="size-5" aria-hidden="true" /> WhatsApp
+               <Whatsapp /> WhatsApp
             </a>
             <a href={directionsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-[var(--radius-xl)] border border-border bg-background px-4 text-base font-semibold text-foreground transition-colors hover:bg-accent focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring">
               <Navigation className="size-5" aria-hidden="true" /> Directions

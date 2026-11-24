@@ -8,13 +8,13 @@ export const doctorContent = {
   name: "Dr. Shafqat Batool",
   specialty: "Consultant Gynecologist, Obstetrician & Infertility Specialist",
   promise:
-    "Personal, respectful care for every stage of women's health—with clear guidance and time to answer your questions.",
+    "Personal, respectful care for every stage of women's health with clear guidance and time to answer your questions.",
   location: "Dera Ghazi Khan",
   hours: "Monday–Saturday · 5:00 PM–9:00 PM",
   experience: "12+ years",
-  whatsappNumber: "923126466132",
-  phone: "+92 312 6466132",
-  phoneHref: "+923126466132",
+  whatsappNumber: "+15551650974",
+  phone: "+1 555 165-0974",
+  phoneHref: "+15551650974",
   portrait: "/doctor.png",
   pmcNumber: null,
   trust: {
@@ -41,7 +41,7 @@ export const doctorContent = {
   },
   about: {
     heading: "Care shaped around your questions",
-    body: "Dr. Shafqat Batool provides attentive care in obstetrics, gynecology, and infertility. Each consultation begins by listening—so patients leave with a clear understanding of their concerns and the next practical step.",
+    body: "Dr. Shafqat Batool provides attentive care in obstetrics, gynecology, and infertility. Each consultation begins by listening so patients leave with a clear understanding of their concerns and the next practical step.",
     approach:
       "Respectful, private consultations for every stage of a woman's health.",
   },
@@ -89,7 +89,7 @@ export const doctorContent = {
     hours: "Monday–Saturday",
     timing: "5:00 PM–9:00 PM",
     appointment: "Appointments by phone or WhatsApp",
-    fee: null,
+    fee: 1500,
   },
   faq: {
     heading: "Frequently asked questions",
