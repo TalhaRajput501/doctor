@@ -19,7 +19,7 @@ function getSessionOptions(): SessionOptions {
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       path: "/",
-      maxAge: 60 * 60 * 8,
+      maxAge: 60 * 60 * 24, // for 24 hours
     },
   };
 }

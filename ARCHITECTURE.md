@@ -27,9 +27,13 @@
 9. BookingCTA: dark teal section, short form (name, phone, concern) that opens WhatsApp with the message filled, plus phone number.
 - `/dashboard` checks an encrypted `iron-session` cookie before rendering queue controls.
 - `/api/receptionist/*` is the browser-facing, session-protected API; it reads clinic configuration and the session secret only on the server.
+- `PATCH /api/dashboard/clinic-settings` uses the same receptionist session to update clinic-wide `isOpen` and validated PKT `cutoffHour`; no n8n API key is sent to the browser.
+- Queue GET returns persisted booking state plus current PKT hour so the receptionist can see when WhatsApp cutoff has passed.
+- `POST /api/receptionist/token-action` applies skip, priority, cancel, and re-queue transitions under the queue lock; re-queue preserves the existing token number.
+- The protected queue response contains receptionist contact details and today's skipped/completed history. `/api/v1/token-status` returns completed/skipped/cancelled state and computes wait position from waiting tokens only.
 - Queue actions and both n8n `call-next` routes use the same expiring MongoDB queue lock.
 - The dashboard is scoped by `RECEPTIONIST_CLINIC_ID` and `RECEPTIONIST_SHIFT` environment variables.
-- Never expose `N8N_API_KEY` or patient phone numbers in the dashboard payload.
+- Never expose `N8N_API_KEY`. Patient phone numbers are returned only by the session-protected receptionist queue for staff contact.
 10. Footer: address, timings, phone, WhatsApp, copyright.
 
 ## Key Directories

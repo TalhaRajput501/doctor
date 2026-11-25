@@ -6,6 +6,10 @@
 - Restored API-key protection on token-status and documented dashboard environment variables and architecture.
 - Focused ESLint on dashboard, queue, and token-status files passes. Production build passes; Next reports `/dashboard` as partial prerender with dynamically streamed receptionist content. Full lint remains blocked by unrelated errors in `book-token`, homepage `About`, and shared DB files.
 - Fresh verification on 2026-11-25: focused ESLint passed and `yarn build` passed. No live queue actions were run because the configured clinic database has not been confirmed as non-production.
+- Added session-protected token actions for no-show/skip, urgent priority, cancel, and re-queue. Re-queue restores the original token number; waiting rows now include receptionist-only contact details, and today's skipped/completed records appear in collapsible history.
+- Updated WhatsApp token status to include completed, skipped, and cancelled records while computing live wait positions from waiting tokens only. Focused ESLint, editor diagnostics, and `yarn build` pass; dashboard smoke check returns 200 and unauthenticated mutation/status requests return 401. No new authenticated mutations were run during this task.
+- Added session-protected `PATCH /api/dashboard/clinic-settings` for clinic-wide booking pause/open and validated 0–23 PKT WhatsApp cutoff updates. The queue response now includes live clinic settings and current PKT hour; dashboard header has confirmed pause, cutoff selector, close-now action, optimistic rollback, and paused/cutoff status banner.
+- Verification: focused ESLint, editor diagnostics, production build, diff check, dashboard GET (200), and unauthenticated settings PATCH (401) pass. No authenticated clinic setting was changed during verification.
 
 ## 2026-11-23
 - Built the Trust Strip section below the hero.

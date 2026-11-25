@@ -43,7 +43,7 @@ RECEPTIONIST_SHIFT=evening
 
 Set `RECEPTIONIST_PASSWORD` to a strong, unique staff password. `RECEPTIONIST_SESSION_PASSWORD` must be at least 32 characters; generate a random value, for example with `openssl rand -base64 32`. `RECEPTIONIST_CLINIC_ID` is the MongoDB `_id` of the clinic record. Keep `N8N_API_KEY` server-side and separate from the receptionist password. Production must use HTTPS so the session cookie is secure.
 
-The dashboard lists today's waiting and serving patients, supports walk-in registration, and keeps “Call next” separate from “Finish visit.” Its queue refreshes every 15 seconds. The clinic shift defaults to `evening` and can be overridden with `RECEPTIONIST_SHIFT`.
+The dashboard lists today's waiting and serving patients, supports walk-in registration, and keeps “Call next” separate from “Finish visit.” Receptionists can pause/open WhatsApp and walk-in bookings, change today's WhatsApp cutoff (PKT), or close WhatsApp bookings for the day while leaving walk-ins available. These settings update the configured clinic record. Its queue refreshes every 15 seconds. The clinic shift defaults to `evening` and can be overridden with `RECEPTIONIST_SHIFT`.
 
 ## Deploy on Vercel
 

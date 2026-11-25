@@ -16,7 +16,7 @@
  * RESPONSE:
  *   { ok: true, hasToken: false }
  *   { ok: true, hasToken: true, tokens: [{ token, patientName, relation, visitDate, isToday,
- *       status: "waiting"|"serving"|"completed"|"skipped",
+ *       status: "waiting"|"serving"|"completed"|"skipped"|"cancelled",
  *       aheadOfYou: number|null,   // only while waiting
  *       nowServing: number|null,
  *       estimatedMinutes: number|null }] }
@@ -24,7 +24,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Types } from "mongoose";
 import { connectDB } from "@/lib/db";
- import { Token } from "@/models/Token";
+import { Token } from "@/models/Token";
 import { Clinic } from "@/models/Clininc";
 import { pktDate } from "@/lib/pkt";
 
@@ -34,7 +34,7 @@ interface TokenStatusRecord {
   relation: string;
   visitDate: string;
   shift: string;
-  status: "waiting" | "serving" | "completed" | "skipped";
+  status: "waiting" | "serving" | "completed" | "skipped" | "cancelled";
   priority: number;
 }
 
@@ -66,7 +66,7 @@ export async function GET(req: NextRequest) {
     clinicId,
     phone,
     visitDate: { $in: [today, tomorrow] },
-    status: { $in: ["waiting", "serving", "skipped"] },
+    status: { $in: ["waiting", "serving", "completed", "skipped", "cancelled"] },
   })
     .sort({ visitDate: 1, token: 1 })
     .lean<TokenStatusRecord[]>();
