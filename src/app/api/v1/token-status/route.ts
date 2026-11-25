@@ -28,10 +28,20 @@ import { connectDB } from "@/lib/db";
 import { Clinic } from "@/models/Clininc";
 import { pktDate } from "@/lib/pkt";
 
+interface TokenStatusRecord {
+  token: number;
+  patientName: string;
+  relation: string;
+  visitDate: string;
+  shift: string;
+  status: "waiting" | "serving" | "completed" | "skipped";
+  priority: number;
+}
+
 export async function GET(req: NextRequest) {
-  // if (req.headers.get("x-api-key") !== process.env.N8N_API_KEY) {
-  //   return NextResponse.json({ ok: false, code: "UNAUTHORIZED" }, { status: 401 });
-  // }
+  if (req.headers.get("x-api-key") !== process.env.N8N_API_KEY) {
+    return NextResponse.json({ ok: false, code: "UNAUTHORIZED" }, { status: 401 });
+  }
 
   const sp = req.nextUrl.searchParams;
   const clinicId = String(sp.get("clinicId") ?? "");
@@ -47,17 +57,19 @@ export async function GET(req: NextRequest) {
   const today = pktDate(0);
   const tomorrow = pktDate(1);
 
-  const clinic = await Clinic.findById(clinicId).select("avgConsultMin").lean<any>();
+  const clinic = await Clinic.findById(clinicId)
+    .select("avgConsultMin")
+    .lean<{ avgConsultMin: number }>();
   if (!clinic) return NextResponse.json({ ok: false, code: "BAD_CLINIC" }, { status: 404 });
 
   const mine = await Token.find({
     clinicId,
     phone,
     visitDate: { $in: [today, tomorrow] },
-    status: { $in: ["waiting", "serving", "completed", "skipped"] },
+    status: { $in: ["waiting", "serving", "skipped"] },
   })
     .sort({ visitDate: 1, token: 1 })
-    .lean<any[]>();
+    .lean<TokenStatusRecord[]>();
 
   if (mine.length === 0) return NextResponse.json({ ok: true, hasToken: false });
 

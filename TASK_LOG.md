@@ -1,4 +1,13 @@
 ## 2026-11-23
+## 2026-11-25
+- Implemented receptionist login with encrypted `iron-session` cookies and server-only configuration.
+- Built a responsive today's queue dashboard with queue counts, current patient, wait estimates, periodic refresh, walk-in registration, and explicit call-next/finish actions.
+- Added session-protected queue APIs and serialized queue transitions shared with existing n8n call-next routes.
+- Restored API-key protection on token-status and documented dashboard environment variables and architecture.
+- Focused ESLint on dashboard, queue, and token-status files passes. Production build passes; Next reports `/dashboard` as partial prerender with dynamically streamed receptionist content. Full lint remains blocked by unrelated errors in `book-token`, homepage `About`, and shared DB files.
+- Fresh verification on 2026-11-25: focused ESLint passed and `yarn build` passed. No live queue actions were run because the configured clinic database has not been confirmed as non-production.
+
+## 2026-11-23
 - Built the Trust Strip section below the hero.
 - Added four factual columns for qualifications, experience, languages, and clinic location.
 - Added shared trust content to `src/lib/content.ts` and composed `TrustStrip` in the home page.

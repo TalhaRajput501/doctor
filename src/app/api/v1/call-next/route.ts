@@ -19,51 +19,51 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Types } from "mongoose";
 import { connectDB } from "@/lib/db";
-import { Token } from "@/models/Token";
 import { pktDate } from "@/lib/pkt";
-
-// A second tap right after the first would skip a patient who was only just called in.
-const DOUBLE_TAP_MS = 3000;
+import { callNextLegacy } from "@/lib/call-next-transition";
 
 export async function POST(req: NextRequest) {
   if (req.headers.get("x-api-key") !== process.env.N8N_API_KEY) {
     return NextResponse.json({ ok: false, code: "UNAUTHORIZED" }, { status: 401 });
   }
 
-  let body: any = {};
-  try { body = await req.json(); } catch {}
-  const clinicId = String(body.clinicId ?? "");
-  const shift = String(body.shift ?? "evening");
+  let body: Record<string, unknown>;
+  try {
+    const parsed: unknown = await req.json();
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+      return NextResponse.json({ ok: false, code: "BAD_JSON" }, { status: 400 });
+    }
+    body = parsed as Record<string, unknown>;
+  } catch {
+    return NextResponse.json({ ok: false, code: "BAD_JSON" }, { status: 400 });
+  }
+  const clinicId = typeof body.clinicId === "string" ? body.clinicId : "";
+  const shift = typeof body.shift === "string" ? body.shift : "evening";
   if (!Types.ObjectId.isValid(clinicId)) {
     return NextResponse.json({ ok: false, code: "BAD_CLINIC" }, { status: 400 });
   }
-
-  await connectDB();
-  const base = { clinicId, visitDate: pktDate(0), shift };
-
-  const current = await Token.findOne({ ...base, status: "serving" });
-  if (current?.calledAt && Date.now() - current.calledAt.getTime() < DOUBLE_TAP_MS) {
-    return NextResponse.json({ ok: false, code: "TOO_FAST" });
+  if (!/^[a-zA-Z0-9_-]{1,32}$/.test(shift)) {
+    return NextResponse.json({ ok: false, code: "BAD_SHIFT" }, { status: 400 });
   }
 
-  // 1. Whoever was being seen is now served.
-  const done = await Token.updateMany(
-    { ...base, status: "serving" },
-    { $set: { status: "completed", completedAt: new Date() } }
-  );
+  await connectDB();
+  const result = await callNextLegacy(clinicId, pktDate(0), shift);
+  if (!result.acquired) {
+    return NextResponse.json({ ok: false, code: "QUEUE_BUSY" }, { status: 409 });
+  }
+  if (result.value?.code === "TOO_FAST") {
+    return NextResponse.json({ ok: false, code: "TOO_FAST" }, { status: 409 });
+  }
+  if (result.value?.code === "QUEUE_INCONSISTENT") {
+    return NextResponse.json({ ok: false, code: "QUEUE_INCONSISTENT" }, { status: 409 });
+  }
 
-  // 2. Atomically take the next waiting patient (two taps can never pick the same person).
-  const next = await Token.findOneAndUpdate(
-    { ...base, status: "waiting" },
-    { $set: { status: "serving", calledAt: new Date() } },
-    { sort: { priority: -1, token: 1 }, new: true }
-  );
-
-  const waitingLeft = await Token.countDocuments({ ...base, status: "waiting" });
-
-  if (!next) {
+  if (!result.value || result.value.queueEmpty) {
     return NextResponse.json({
-      ok: true, queueEmpty: true, servedJustNow: done.modifiedCount, waitingLeft: 0,
+      ok: true,
+      queueEmpty: true,
+      servedJustNow: result.value?.servedJustNow ?? 0,
+      waitingLeft: 0,
     });
   }
 
@@ -71,13 +71,13 @@ export async function POST(req: NextRequest) {
     ok: true,
     queueEmpty: false,
     now: {
-      token: next.token,
-      patientName: next.patientName,
-      relation: next.relation,
-      source: next.source,
-      phone: next.phone,
+      token: result.value.next?.token,
+      patientName: result.value.next?.patientName,
+      relation: result.value.next?.relation,
+      source: result.value.next?.source,
+      phone: result.value.next?.phone,
     },
-    servedJustNow: done.modifiedCount,
-    waitingLeft,
+    servedJustNow: result.value.servedJustNow,
+    waitingLeft: result.value.waitingLeft,
   });
 }

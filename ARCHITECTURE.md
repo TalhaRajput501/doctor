@@ -11,13 +11,9 @@
 - `components.json` preset is final — palette, fonts, and radius are fixed
 
 ## Folder Structure
-- `components/ui/` — shadcn components only
-- `components/shared/` — shared utilities and helpers
-- `components/features/home/<Section>.tsx` — one per home section
-- `lib/` — logic, utils, cn helper
-- `hooks/` — custom React hooks
-- `types/` — TypeScript type definitions
-- `app/` — thin page components (stay thin; layout + metadata only)
+- `components/features/dashboard/` — receptionist login and queue interface
+- `models/` — Mongoose models, including queue transition locks
+
 
 ## Home Sections (each its own file in `components/features/home/`)
 1. Header: logo/name, anchor links, sticky "Book on WhatsApp" button. Mobile: bottom-fixed Call + WhatsApp bar.
@@ -29,6 +25,11 @@
 7. Testimonials: 3 short real reviews with first name and area, plus rating. No fake reviews.
 8. FAQ: 5 questions (first visit, fee, privacy, what to bring, online consultation). Accordion.
 9. BookingCTA: dark teal section, short form (name, phone, concern) that opens WhatsApp with the message filled, plus phone number.
+- `/dashboard` checks an encrypted `iron-session` cookie before rendering queue controls.
+- `/api/receptionist/*` is the browser-facing, session-protected API; it reads clinic configuration and the session secret only on the server.
+- Queue actions and both n8n `call-next` routes use the same expiring MongoDB queue lock.
+- The dashboard is scoped by `RECEPTIONIST_CLINIC_ID` and `RECEPTIONIST_SHIFT` environment variables.
+- Never expose `N8N_API_KEY` or patient phone numbers in the dashboard payload.
 10. Footer: address, timings, phone, WhatsApp, copyright.
 
 ## Key Directories
